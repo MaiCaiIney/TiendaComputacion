@@ -10,7 +10,7 @@ import java.util.StringJoiner;
  * 4. Facilitar el polimorfismo
  */
 public abstract class Producto {
-    private static int autoid = 0;
+    private static int autoid = 1;
     private final int id;
     private String nombre;
     private float precio;
@@ -55,8 +55,16 @@ public abstract class Producto {
         this.stock = stock;
     }
 
+    public abstract float calcularPrecio();
+
     @Override
     public String toString() {
         return String.format("%d. %s. Precio: $%.2f. Stock: %d. ", this.id, this.nombre, this.precio, this.stock);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(!(obj instanceof Producto)) return false;
+        return this.nombre.equals(((Producto) obj).getNombre());
     }
 }

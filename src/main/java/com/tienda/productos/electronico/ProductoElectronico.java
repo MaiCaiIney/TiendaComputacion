@@ -1,6 +1,7 @@
 package com.tienda.productos.electronico;
 
 import com.tienda.productos.Producto;
+import com.tienda.productos.noelectronico.ProductoNoElectronico;
 
 /**
  * Responsabilidad de la clase ProductoElectronico:
@@ -14,11 +15,6 @@ import com.tienda.productos.Producto;
 public abstract class ProductoElectronico extends Producto {
     private String marca;
 
-    public ProductoElectronico(String nombre, float precio, String marca) {
-        super(nombre, precio, 0);
-        this.marca = marca;
-    }
-
     public ProductoElectronico(String nombre, float precio, int stock, String marca) {
         super(nombre, precio, stock);
         this.marca = marca;
@@ -30,6 +26,11 @@ public abstract class ProductoElectronico extends Producto {
 
     public void setMarca(String marca) {
         this.marca = marca;
+    }
+
+    @Override
+    public float calcularPrecio() {
+        return super.getPrecio() * 1.21f;
     }
 
     @Override

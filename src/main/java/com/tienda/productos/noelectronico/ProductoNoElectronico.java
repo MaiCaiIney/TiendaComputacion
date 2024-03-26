@@ -14,6 +14,11 @@ import com.tienda.productos.Producto;
 public abstract class ProductoNoElectronico extends Producto {
     private boolean ergonomico;
 
+    public ProductoNoElectronico(String nombre) {
+        super(nombre, 0, 0);
+        this.ergonomico = false;
+    }
+
     public ProductoNoElectronico(String nombre, float precio) {
         super(nombre, precio, 0);
         this.ergonomico = false;
@@ -30,6 +35,11 @@ public abstract class ProductoNoElectronico extends Producto {
 
     public void setErgonomico(boolean ergonomico) {
         this.ergonomico = ergonomico;
+    }
+
+    @Override
+    public float calcularPrecio() {
+        return super.getPrecio();
     }
 
     @Override

@@ -4,12 +4,10 @@ public class Teclado extends ProductoElectronico {
     private boolean mecanico;
     private boolean numerico;
 
-    public Teclado(String nombre, float precio, String marca) {
-        super(nombre, precio, marca);
-    }
-
     public Teclado(String nombre, float precio, int stock, String marca) {
         super(nombre, precio, stock, marca);
+        this.mecanico = false;
+        this.numerico = false;
     }
 
     public boolean isMecanico() {

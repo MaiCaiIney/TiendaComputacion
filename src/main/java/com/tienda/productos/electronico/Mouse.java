@@ -4,12 +4,10 @@ public class Mouse extends ProductoElectronico {
     private boolean gamer;
     private boolean luz;
 
-    public Mouse(String nombre, float precio, String marca) {
-        super(nombre, precio, marca);
-    }
-
     public Mouse(String nombre, float precio, int stock, String marca) {
         super(nombre, precio, stock, marca);
+        this.gamer = false;
+        this.luz = false;
     }
 
     public boolean isGamer() {
@@ -26,6 +24,11 @@ public class Mouse extends ProductoElectronico {
 
     public void setLuz(boolean luz) {
         this.luz = luz;
+    }
+
+    @Override
+    public float calcularPrecio() {
+        return super.getPrecio() * ((this.gamer) ? 1.21f : 1);
     }
 
     @Override

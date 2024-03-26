@@ -36,13 +36,14 @@ public class Tienda {
 
     private void gestionarMenuPrincipal() {
         String menu = """
-                
+
                 Menú
                 \t1. Listar todos los productos
                 \t2. Iniciar carrito de compra
                 \t0. Finalizar
 
-                Ingresar opción:\s""";
+                Ingresar opción: """;
+        //String menu = "Menu\n\t1. Listar\n\t2.Iniciar\n\t0. Finalizar";
         int opcion = 0;
 
         do {
@@ -114,6 +115,7 @@ public class Tienda {
         if(this.productos.isEmpty()) System.out.println("\nNo hay productos cargados.\n");
 
         System.out.println("\nProductos Electrónicos\n");
+
         var electronicos = this.productos.stream().filter(producto -> producto instanceof ProductoElectronico).sorted(Comparator.comparing(Producto::getId));
         electronicos.forEach(p -> System.out.println("\t" + p));
 
@@ -217,7 +219,7 @@ public class Tienda {
     }
 
     private void cargarDatos() {
-        Faker faker = new Faker(new Locale("es"));
+        Faker faker = new Faker();
         int contador = 0;
         // Cargar clientes random
         do {
@@ -235,38 +237,49 @@ public class Tienda {
             float precio = faker.number().numberBetween(2000, 5000);
             int stock = faker.number().randomDigitNotZero();
             String marca = faker.commerce().department();
+
             Pad pad = new Pad(nombre, precio, stock);
             pad.setTamanio(faker.number().randomDigit());
-            productos.add(pad);
+            agregarProducto(pad);
+
+            Pad pad2 = new Pad(nombre, precio, stock);
+            pad.setTamanio(faker.number().randomDigit());
+            agregarProducto(pad2);
 
             nombre = faker.commerce().productName();
             precio = faker.number().numberBetween(25000, 100000);
+            stock = faker.number().randomDigitNotZero();
             Silla silla = new Silla(nombre, precio, stock);
             silla.setMaterial(faker.commerce().material());
             silla.setErgonomico(faker.random().nextBoolean());
-            productos.add(silla);
+            agregarProducto(silla);
 
             nombre = faker.commerce().productName();
             precio = faker.number().numberBetween(20000, 75000);
             stock = faker.number().randomDigitNotZero();
-            Producto mouse = new Mouse(nombre, precio, stock, marca);
-            productos.add(mouse);
+            Mouse mouse = new Mouse(nombre, precio, stock, marca);
+            mouse.setGamer(faker.random().nextBoolean());
+            agregarProducto(mouse);
 
             nombre = faker.commerce().productName();
             precio = faker.number().numberBetween(100000, 500000);
             stock = faker.number().randomDigitNotZero();
             marca = faker.commerce().department();
             Producto pantalla = new Pantalla(nombre, precio, stock, marca, faker.number().numberBetween(1, 120));
-            productos.add(pantalla);
+            agregarProducto(pantalla);
 
             nombre = faker.commerce().productName();
             precio = faker.number().numberBetween(10000, 50000);
             stock = faker.number().randomDigitNotZero();
             marca = faker.commerce().department();
             Producto teclado = new Teclado(nombre, precio, stock, marca);
-            productos.add(teclado);
+            agregarProducto(teclado);
 
             contador++;
         } while (contador < 3);
+    }
+
+    private void agregarProducto(Producto producto) {
+        if(!this.productos.contains(producto)) productos.add(producto);
     }
 }
