@@ -25,11 +25,13 @@ public class Carrito {
         return items;
     }
 
-    public void mostrarCarrito() {
+    public String mostrarCarrito() {
+        StringBuilder sb = new StringBuilder();
         this.items.forEach(item -> {
-            System.out.printf("\t%-25s\t%d x $%.2f\t$%.2f\n", item.getProducto().getNombre(), item.getCantidad(), item.getProducto().getPrecio(), item.getSubtotal());
+            sb.append(String.format("\t%-25s\t%d x $%.2f\t$%.2f\n", item.getProducto().getNombre(), item.getCantidad(), item.getProducto().getPrecio(), item.getSubtotal()));
         });
-        System.out.printf("\tTOTAL: $%.2f%n", getTotal());
+        sb.append(String.format("\tTOTAL: $%.2f%n", getTotal()));
+        return sb.toString();
     }
 
     public double getTotal() {

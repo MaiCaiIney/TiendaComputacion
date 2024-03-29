@@ -28,17 +28,18 @@ public class Factura {
         autoid++;
     }
 
-    public void mostrar() {
+    public String mostrar() {
 
-        String fechaFormato = this.fecha.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        try {
+            String fechaFormato = this.fecha.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 
-        StringBuilder items = new StringBuilder();
-        for (Item item : this.items) {
-            items.append(String.format("%-25s|  $%.2f  | %d |  $%.2f\n",
-                    item.getProducto().getNombre(), item.getProducto().getPrecio(), item.getCantidad(), item.getSubtotal() ));
-        }
+            StringBuilder items = new StringBuilder();
+            for (Item item : this.items) {
+                items.append(String.format("%-25s|  $%.2f  | %d |  $%.2f\n",
+                        item.getProducto().getNombre(), item.getProducto().getPrecio(), item.getCantidad(), item.getSubtotal() ));
+            }
 
-        String formato = """
+            String formato = """
                 
                 ------------------------------------------------------------
                 \t         TIENDA               \t|\tFecha: %s
@@ -55,6 +56,9 @@ public class Factura {
                 ------------------------------------------------------------
                 """;
 
-        System.out.println(String.format(formato, fechaFormato, this.id, this.cliente.getNombre(), this.cliente.getDni(), items, this.total));
+            return String.format(formato, fechaFormato, this.id, this.cliente.getNombre(), this.cliente.getDni(), items, this.total);
+        } catch (Exception e) {
+            return null;
+        }
     }
 }
