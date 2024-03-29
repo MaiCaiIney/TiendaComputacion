@@ -1,5 +1,7 @@
 package com.tienda.productos.electronico;
 
+import java.util.StringJoiner;
+
 public class Teclado extends ProductoElectronico {
     private boolean mecanico;
     private boolean numerico;
@@ -24,5 +26,10 @@ public class Teclado extends ProductoElectronico {
 
     public void setNumerico(boolean numerico) {
         this.numerico = numerico;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("[TECLADO] %s. Mecánico: %s. Numérico: %s.", super.toString(), this.mecanico ? "sí" : "no", this.numerico ? "sí" : "no");
     }
 }

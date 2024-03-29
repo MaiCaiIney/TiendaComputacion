@@ -59,7 +59,7 @@ public abstract class Producto {
 
     @Override
     public String toString() {
-        return String.format("%d. %s. Precio: $%.2f. Stock: %d. ", this.id, this.nombre, this.precio, this.stock);
+        return String.format("%d. %s. Precio: $%.2f. Stock: %d", this.id, this.nombre, this.precio, this.stock);
     }
 
     @Override

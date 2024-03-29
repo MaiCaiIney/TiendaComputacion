@@ -4,25 +4,21 @@ public class Cliente {
     private static int autoid = 0;
     private final int id;
     private String nombre;
-    private String dmi;
+    private String dni;
     private String email;
 
-    /**
-     * @param nombre Nombre
-     * @param dni    Número de documento
-     */
     public Cliente(String nombre, String dni) {
         this.id = autoid;
         this.nombre = nombre;
-        this.dmi = dni;
+        this.dni = dni;
 
         autoid++;
     }
 
-    public Cliente(String nombre, String dmi, String email) {
+    public Cliente(String nombre, String dni, String email) {
         this.id = autoid;
         this.nombre = nombre;
-        this.dmi = dmi;
+        this.dni = dni;
         this.email = email;
 
         autoid++;
@@ -40,12 +36,12 @@ public class Cliente {
         this.nombre = nombre;
     }
 
-    public String getDmi() {
-        return dmi;
+    public String getDni() {
+        return dni;
     }
 
-    public void setDmi(String dmi) {
-        this.dmi = dmi;
+    public void setDni(String dni) {
+        this.dni = dni;
     }
 
     public String getEmail() {
@@ -54,5 +50,10 @@ public class Cliente {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%d. %s - %s", this.id, this.dni, this.nombre);
     }
 }

@@ -35,6 +35,6 @@ public abstract class ProductoElectronico extends Producto {
 
     @Override
     public String toString() {
-        return super.toString() + String.format("Marca: %s. ", this.marca);
+        return String.format("%s. Marca: %s", super.toString(), this.marca);
     }
 }

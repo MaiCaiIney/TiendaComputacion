@@ -33,6 +33,6 @@ public class Mouse extends ProductoElectronico {
 
     @Override
     public String toString() {
-        return super.toString() + String.format("Gamer: %s. Con luz: %s. ", (this.gamer ? "sí" : "no"), (this.luz ? "sí" : "no"));
+        return String.format("[MOUSE] %s. Gamer: %s. Con luz: %s. ", super.toString(), (this.gamer ? "sí" : "no"), (this.luz ? "sí" : "no"));
     }
 }

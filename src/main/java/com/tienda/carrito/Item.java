@@ -18,4 +18,8 @@ public class Item {
     public Producto getProducto() {
         return producto;
     }
+
+    public double getSubtotal() {
+        return this.cantidad * this.getProducto().getPrecio();
+    }
 }

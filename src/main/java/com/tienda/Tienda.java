@@ -3,6 +3,7 @@ package com.tienda;
 import com.github.javafaker.Faker;
 import com.tienda.carrito.Carrito;
 import com.tienda.clientes.Cliente;
+import com.tienda.facturacion.Factura;
 import com.tienda.productos.Producto;
 import com.tienda.productos.electronico.Mouse;
 import com.tienda.productos.electronico.Pantalla;
@@ -21,29 +22,31 @@ public class Tienda {
 
     private Carrito carrito;
 
-    private Scanner scanner;
+    private final ArrayList<Factura> facturas;
+
+    private final Scanner scanner;
 
     public Tienda() {
         this.clientes = new ArrayList<>();
         this.productos = new ArrayList<>();
+        this.facturas = new ArrayList<>();
         this.scanner = new Scanner(System.in);
     }
 
     public void iniciar() {
         cargarDatos();
-        gestionarMenuPrincipal();
+        mostrarMenuPrincipal();
     }
 
-    private void gestionarMenuPrincipal() {
+    private void mostrarMenuPrincipal() {
         String menu = """
 
                 Menú
                 \t1. Listar todos los productos
                 \t2. Iniciar carrito de compra
                 \t0. Finalizar
-
-                Ingresar opción: """;
-        //String menu = "Menu\n\t1. Listar\n\t2.Iniciar\n\t0. Finalizar";
+                
+                Opción:""";
         int opcion = 0;
 
         do {
@@ -58,28 +61,29 @@ public class Tienda {
                 switch (opcion) {
                     case -1 -> opcion = gestionarError(menu);
                     case 0 -> finalizar();
-                    case 1 -> listarProductosPorCategorias();
+                    case 1 -> listarProductos();
                     case 2 -> iniciarCarrito();
-                    default -> opcion = gestionarOpcionInvalida(menu);
+                    default -> opcion = gestionarValorInvalido(menu);
                 }
             } catch (Exception e) {
                 this.scanner.nextLine();
+                System.out.println("Error: " + e.getLocalizedMessage());
                 opcion = -1;
             }
         } while(opcion != 0);
     }
 
-    private void gestionarMenuCarrito() {
+    private void mostrarMenuCarrito() {
         String menu = """
                 
-                Menú Carrito
+                Menú
                 \t1. Listar todos los productos
                 \t2. Ingresar producto por código
                 \t3. Buscar producto por nombre
                 \t4. Continuar compra
-                \t0. Finalizar
+                \t0. Cancelar compra
                 
-                Ingresar opción:\s""";
+                Opción:""";
         int opcion = 0;
 
         do {
@@ -98,20 +102,24 @@ public class Tienda {
                         finalizar();
                         return;
                     }
-                    case 1 -> listarProductosPorCategorias();
-                    case 2 -> agregarItemsAlCarrito();
-                    case 3 -> gestionarBusquedaPorNombre();
-                    case 4 -> continuarCompra();
-                    default -> opcion = gestionarOpcionInvalida(menu);
+                    case 1 -> listarProductos();
+                    case 2 -> ingresarItemPorCodigo();
+                    case 3 -> buscarProductoPorNombre();
+                    case 4 -> {
+                        continuarCompra();
+                        return;
+                    }
+                    default -> opcion = gestionarValorInvalido(menu);
                 }
             } catch (Exception e) {
                 this.scanner.nextLine();
+                System.out.println("Error: " + e.getLocalizedMessage());
                 opcion = -1;
             }
         } while(opcion != 0);
     }
 
-    private void listarProductosPorCategorias() {
+    private void listarProductos() {
         if(this.productos.isEmpty()) System.out.println("\nNo hay productos cargados.\n");
 
         System.out.println("\nProductos Electrónicos\n");
@@ -126,49 +134,50 @@ public class Tienda {
 
     private void iniciarCarrito() {
         this.carrito = new Carrito();
-        gestionarMenuCarrito();
+        mostrarMenuCarrito();
     }
 
-    private void agregarItemsAlCarrito() {
+    private void ingresarItemPorCodigo() {
         try {
-            System.out.println("Código del producto: ");
+            System.out.println("\nCódigo: ");
             int id = this.scanner.nextInt();
             Producto producto = buscarProducto(id);
 
             if(producto == null) {
-                System.out.printf("El producto con código %d no existe.%n", id);
+                System.out.printf("Producto %d no encontrado.%n", id);
                 return;
             }
 
-            System.out.printf("Vas a comprar %s.%n", producto.getNombre().toUpperCase());
-            System.out.println("Cantidad a comprar: ");
+            System.out.printf("Producto %s.%n", producto.getNombre().toUpperCase());
+            System.out.println("Cantidad: ");
+
             int cantidad = this.scanner.nextInt();
 
             if(cantidad < 1) {
-                System.out.printf("Cantidad inválida.%n");
+                mostrarMensajeValorInvalido();
                 return;
             }
 
-            String result = this.carrito.addProducto(producto, cantidad);
+            String result = this.carrito.agregarProducto(producto, cantidad);
             System.out.println(result);
         } catch (Exception e) {
             this.scanner.nextLine();
-            System.out.println("Por favor ingrese opciones válidas.");
-            agregarItemsAlCarrito();
+            mostrarMensajeError();
+            ingresarItemPorCodigo();
         }
     }
 
-    private void gestionarBusquedaPorNombre() {
+    private void buscarProductoPorNombre() {
         try {
-            System.out.println("Nombre a buscar: ");
+            System.out.println("\nNombre: ");
             String nombre = this.scanner.next();
             List<Producto> productos = buscarProducto(nombre);
 
-            System.out.println("\n\tProductos encontrados:\n");
+            System.out.println("\nProductos encontrados:\n");
             productos.forEach(p -> System.out.println("\t" + p));
         } catch (Exception e) {
-            System.out.println("\nPor favor ingrese opciones válidas.");
-            gestionarBusquedaPorNombre();
+            mostrarMensajeError();
+            buscarProductoPorNombre();
         }
     }
 
@@ -184,8 +193,210 @@ public class Tienda {
     }
 
     private void continuarCompra() {
-        System.out.println("\nVas a comprar:\n");
+        String menu = """
+                
+                Menú
+                \t1. Mostrar carrito
+                \t2. Realizar pago
+                \t3. Agregar productos al carrito
+                \t0. Cancelar compra
+                
+                Opción:""";
+        int opcion = 0;
+
+        do {
+            try {
+                if(opcion < 0) {
+                    opcion = gestionarError(menu);
+                } else {
+                    System.out.println(menu);
+                    opcion = this.scanner.nextInt();
+                }
+                switch (opcion) {
+                    case -1 -> opcion = gestionarError(menu);
+                    case 0 -> {
+                        finalizarCarrito();
+                        finalizar();
+                    }
+                    case 1 -> mostrarCarrito();
+                    case 2 -> {
+                        realizarPago();
+                        return;
+                    }
+                    case 3 -> mostrarMenuCarrito();
+                    default -> opcion = gestionarValorInvalido(menu);
+                }
+            } catch (Exception e) {
+                this.scanner.nextLine();
+                System.out.println("Error: " + e.getLocalizedMessage());
+                opcion = -1;
+            }
+        } while(opcion != 0);
+    }
+
+    private void mostrarCarrito() {
+        System.out.println("\nCARRITO:");
         this.carrito.mostrarCarrito();
+    }
+
+    private void realizarPago() {
+        String menu = """
+                
+                Menú
+                \t1. Pago en efectivo
+                \t2. Pago con tarjeta de débito o crédito
+                \t0. Cancelar compra
+                
+                Opción:""";
+        int opcion = 0;
+
+        do {
+            try {
+                if(opcion < 0) {
+                    opcion = gestionarError(menu);
+                } else {
+                    System.out.println(menu);
+                    opcion = this.scanner.nextInt();
+                }
+                switch (opcion) {
+                    case -1 -> opcion = gestionarError(menu);
+                    case 0 -> {
+                        finalizarCarrito();
+                        finalizar();
+                    }
+                    case 1 -> {
+                        cobrarEfectivo();
+                        return;
+                    }
+                    case 2 -> {
+                        cobrarTarjeta();
+                        return;
+                    }
+                    default -> opcion = gestionarValorInvalido(menu);
+                }
+            } catch (Exception e) {
+                this.scanner.nextLine();
+                System.out.println("Error: " + e.getLocalizedMessage());
+                opcion = -1;
+            }
+        } while(opcion < 0);
+    }
+
+    private void cobrarEfectivo() {
+        String menu = "\nMonto en efectivo:";
+        int monto = 0;
+
+        do {
+            try {
+                if(monto < 0) {
+                    monto = gestionarError(menu);
+                } else {
+                    System.out.println(menu);
+                    monto = this.scanner.nextInt();
+                }
+
+                if(monto < carrito.getTotal()) {
+                    System.out.println("\nMonto insuficiente para saldar el monto total de la compra.");
+                } else {
+                    System.out.println("\nPago registrado en efectivo.");
+                    finalizarCompra();
+                    return;
+                }
+            } catch (Exception e) {
+                this.scanner.nextLine();
+                monto = -1;
+            }
+        } while(monto < 0 || monto < carrito.getTotal());
+    }
+
+    private void cobrarTarjeta() {
+        System.out.println("Pago registrado con tarjeta.");
+        finalizarCompra();
+    }
+
+    private void finalizarCompra() {
+        actualizarStock();
+        mostrarMenuCliente();
+        finalizarCarrito();
+    }
+
+    private void actualizarStock() {
+        this.carrito.getItems().forEach(item -> {
+            int stock = item.getProducto().getStock() - item.getCantidad();
+            item.getProducto().setStock(stock);
+        });
+    }
+
+    private void mostrarMenuCliente() {
+        String menu = """
+                
+                Menú
+                \t1. Listar clientes
+                \t2. Generar factura
+                
+                Opción:""";
+        int opcion = 0;
+
+        do {
+            try {
+                if(opcion < 0) {
+                    opcion = gestionarError(menu);
+                } else {
+                    System.out.println(menu);
+                    opcion = this.scanner.nextInt();
+                }
+
+                switch (opcion) {
+                    case -1 -> opcion = gestionarError(menu);
+                    case 1 -> listarClientes();
+                    case 2 -> {
+                        boolean resultado = generarFactura();
+                        opcion = resultado ? 2 : -1;
+                    }
+                    default -> opcion = gestionarValorInvalido(menu);
+                }
+            } catch (Exception e) {
+                this.scanner.nextLine();
+                System.out.println("Error: " + e.getLocalizedMessage());
+                opcion = -1;
+            }
+        } while(opcion != 2);
+    }
+
+    private void listarClientes() {
+        System.out.println("\nClientes\n");
+        this.clientes.forEach( cliente -> System.out.println("\t" + cliente));
+    }
+
+    private boolean generarFactura() {
+        Cliente cliente = buscarCliente();
+        if(cliente == null) return false;
+        Factura factura = new Factura(cliente, this.carrito);
+        factura.mostrar();
+        return this.facturas.add(factura);
+    }
+
+    private Cliente buscarCliente() {
+        try {
+            System.out.println("\nDNI del cliente:");
+            long dni = this.scanner.nextLong();
+            Cliente cliente = buscarCliente(String.valueOf(dni));
+            if(cliente == null) {
+                System.out.println("Cliente no encontrado.");
+            }
+            return cliente;
+        } catch (Exception e) {
+            this.scanner.nextLine();
+            System.out.println("Error: " + e.getLocalizedMessage());
+        }
+        return null;
+    }
+
+    private Cliente buscarCliente(String dni) {
+        for(Cliente cliente : this.clientes) {
+            if(cliente.getDni().equals(dni)) return cliente;
+        }
+        return null;
     }
 
     private void finalizarCarrito() {
@@ -193,8 +404,8 @@ public class Tienda {
     }
 
     private int gestionarError(String menu) {
-        System.out.println("\nOcurrió un error al interpretar la opción.\n" + menu);
-
+        mostrarMensajeError();
+        System.out.println(menu);
         try {
             return this.scanner.nextInt();
         } catch (Exception e) {
@@ -203,8 +414,9 @@ public class Tienda {
         }
     }
 
-    private int gestionarOpcionInvalida(String menu) {
-        System.out.println("\nLa opción ingresada no es válida.\n" + menu);
+    private int gestionarValorInvalido(String menu) {
+        mostrarMensajeValorInvalido();
+        System.out.print(menu);
         try {
             return this.scanner.nextInt();
         } catch (Exception e) {
@@ -215,7 +427,7 @@ public class Tienda {
     }
 
     private void finalizar() {
-        System.out.println("\nGracias por utilizar el sistema.");
+
     }
 
     private void cargarDatos() {
@@ -223,7 +435,8 @@ public class Tienda {
         int contador = 0;
         // Cargar clientes random
         do {
-            Cliente cliente = new Cliente(faker.name().fullName(), faker.internet().emailAddress());
+            String dni = String.valueOf(faker.number().randomNumber(8, true));
+            Cliente cliente = new Cliente(faker.name().fullName(), dni, faker.internet().emailAddress());
             clientes.add(cliente);
 
             contador++;
@@ -280,6 +493,14 @@ public class Tienda {
     }
 
     private void agregarProducto(Producto producto) {
-        if(!this.productos.contains(producto)) productos.add(producto);
+        if (!this.productos.contains(producto)) productos.add(producto);
+    }
+
+    private void mostrarMensajeValorInvalido() {
+        System.out.println("\nEl valor ingresado no es válido.");
+    }
+
+    private void mostrarMensajeError() {
+        System.out.println("\nNo fue posible procesar el valor.");
     }
 }

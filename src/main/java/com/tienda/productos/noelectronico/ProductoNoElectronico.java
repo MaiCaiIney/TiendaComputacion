@@ -44,6 +44,6 @@ public abstract class ProductoNoElectronico extends Producto {
 
     @Override
     public String toString() {
-        return super.toString() + String.format("Ergonómico: %s. ", (this.ergonomico) ? "sí" : "no");
+        return String.format("%s. Ergonómico: %s", super.toString(), (this.ergonomico) ? "sí" : "no");
     }
 }

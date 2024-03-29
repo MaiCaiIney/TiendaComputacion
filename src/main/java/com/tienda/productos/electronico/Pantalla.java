@@ -18,6 +18,6 @@ public class Pantalla extends ProductoElectronico {
 
     @Override
     public String toString() {
-        return super.toString() + String.format("Resolución: %.2f", this.resolucion);
+        return String.format("[PANTALLA] %s. Resolución: %.2f", super.toString(), this.resolucion);
     }
 }

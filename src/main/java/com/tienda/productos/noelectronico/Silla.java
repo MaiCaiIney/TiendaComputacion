@@ -21,6 +21,6 @@ public class Silla extends ProductoNoElectronico {
 
     @Override
     public String toString() {
-        return super.toString() + String.format("Material: %s. ", this.material);
+        return String.format("[SILLA] %s. Material: %s.", super.toString(), this.material);
     }
 }

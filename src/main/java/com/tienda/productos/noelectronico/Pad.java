@@ -17,6 +17,6 @@ public class Pad extends ProductoNoElectronico {
 
     @Override
     public String toString() {
-        return String.format("(PAD) %sTamaño: %d. ", super.toString(), this.tamanio);
+        return String.format("[PAD] %s. Tamaño: %d. ", super.toString(), this.tamanio);
     }
 }
