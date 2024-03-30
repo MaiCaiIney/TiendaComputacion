@@ -28,6 +28,10 @@ public class Factura {
         autoid++;
     }
 
+    public Cliente getCliente() {
+        return cliente;
+    }
+
     public String mostrar() {
 
         try {
