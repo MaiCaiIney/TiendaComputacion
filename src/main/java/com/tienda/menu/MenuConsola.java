@@ -25,7 +25,7 @@ public class MenuConsola extends Menu {
                 Menú
                 \t1. Listar todos los productos
                 \t2. Iniciar carrito de compra
-                \t3. Mostrar facturas realizadas
+                \t3. Mostrar facturas realizadas por DNI
                 \t0. Finalizar
 
                 Opción:""";
