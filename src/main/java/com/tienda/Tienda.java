@@ -36,6 +36,10 @@ public class Tienda {
         this.menu = (menuVisual) ? new MenuVisual(this) : new MenuConsola(this);
     }
 
+    public List<Factura> getFacturas() {
+        return facturas;
+    }
+
     public void iniciar() {
         cargarDatos();
         this.menu.mostrarMenuPrincipal();
