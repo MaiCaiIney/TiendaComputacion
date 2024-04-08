@@ -135,7 +135,7 @@ public class Tienda {
         // Cargar clientes random
         do {
             String dni = String.valueOf(faker.number().randomNumber(8, true));
-            Cliente cliente = new Cliente(faker.name().fullName(), dni, faker.internet().emailAddress());
+            Cliente cliente = new Cliente(faker.name().fullName(), dni, faker.internet().emailAddress(),false);
             clientes.add(cliente);
 
             contador++;
