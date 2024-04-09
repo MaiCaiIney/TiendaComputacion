@@ -27,7 +27,7 @@ public class Factura {
         this.cliente = cliente;
         this.items = carrito.getItems();
         this.fecha = LocalDate.now();
-        this.total = carrito.getTotal();
+        this.total = agregarDescuento(cliente,(float)carrito.getTotal());
 
         autoid++;
     }
@@ -72,7 +72,7 @@ public class Factura {
                 ------------------------------------------------------------
                 """;
 
-            return String.format(formato, fechaFormato, this.id, this.cliente.getNombre(), this.cliente.getDni(), items, this.total=agregarDescuento(cliente,total));//se agrego la funcion
+            return String.format(formato, fechaFormato, this.id, this.cliente.getNombre(), this.cliente.getDni(), items, this.total);//se agrego la funcion
         } catch (Exception e) {
             return null;
         }

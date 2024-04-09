@@ -136,6 +136,11 @@ public class Tienda {
         Cliente cliente2= new Premium("Pedrinho","30256897","pp@gmail.com");
         Cliente corp = new Corportativo("Electronicas Isidor","25669999","Electronicos","2235947888","electroisidro@outlook.com","Japon 225");
         Cliente corp1 = new Corportativo("Ferreteria Jose","32658978","Ferreterias","11158748969","joseferretero@outlook.com","El Martillo 2255");
+        clientes.add(cliente);
+        clientes.add(cliente2);
+        clientes.add(corp);
+        clientes.add(corp1);
+
     }
 
     private void cargarDatos() {

@@ -50,7 +50,7 @@ public class Corportativo extends Cliente implements Descuento {
     }
 
     @Override
-    public String toString(){return String.format("%s - %s - %s - %s",this.tipoEmpresa,this.address,this.mail,this.numTel);}
+    public String toString(){return String.format("\t- %s - %s - %s - %s", this.tipoEmpresa,this.address,this.mail,this.numTel);}
 
     @Override
     public float procentaje() {
