@@ -3,6 +3,8 @@ package com.tienda;
 import com.github.javafaker.Faker;
 import com.tienda.carrito.Carrito;
 import com.tienda.clientes.Cliente;
+import com.tienda.clientes.Corportativo;
+import com.tienda.clientes.Premium;
 import com.tienda.facturacion.Factura;
 import com.tienda.menu.Menu;
 import com.tienda.menu.MenuConsola;
@@ -38,6 +40,7 @@ public class Tienda {
 
     public void iniciar() {
         cargarDatos();
+        cargarDatosRudimentario();
         this.menu.mostrarMenuPrincipal();
     }
 
@@ -128,6 +131,12 @@ public class Tienda {
         this.facturas.add(factura);
         return factura.mostrar();
     }
+    private void cargarDatosRudimentario(){
+        Cliente cliente= new Premium("Tata","9154999","hola@gmail.com");
+        Cliente cliente2= new Premium("Pedrinho","30256897","pp@gmail.com");
+        Cliente corp = new Corportativo("Electronicas Isidor","25669999","Electronicos","2235947888","electroisidro@outlook.com","Japon 225");
+        Cliente corp1 = new Corportativo("Ferreteria Jose","32658978","Ferreterias","11158748969","joseferretero@outlook.com","El Martillo 2255");
+    }
 
     private void cargarDatos() {
         Faker faker = new Faker();
@@ -135,7 +144,7 @@ public class Tienda {
         // Cargar clientes random
         do {
             String dni = String.valueOf(faker.number().randomNumber(8, true));
-            Cliente cliente = new Cliente(faker.name().fullName(), dni, faker.internet().emailAddress(),false);
+            Cliente cliente = new Cliente(faker.name().fullName(), dni, faker.internet().emailAddress());
             clientes.add(cliente);
 
             contador++;

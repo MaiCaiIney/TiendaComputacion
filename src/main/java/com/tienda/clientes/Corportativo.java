@@ -1,6 +1,6 @@
 package com.tienda.clientes;
 
-public class Corportativo extends Cliente {
+public class Corportativo extends Cliente implements Descuento {
 
    private String tipoEmpresa;//electronicos, distribuidor, monotributista,responsable inscripto HACER ENUM
     private String numTel;
@@ -48,7 +48,12 @@ public class Corportativo extends Cliente {
     public void setAddress(String address) {
         this.address = address;
     }
+
     @Override
     public String toString(){return String.format("%s - %s - %s - %s",this.tipoEmpresa,this.address,this.mail,this.numTel);}
 
+    @Override
+    public float procentaje() {
+        return 0.5f;
+    }
 }

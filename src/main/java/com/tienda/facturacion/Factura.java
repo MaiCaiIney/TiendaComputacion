@@ -3,6 +3,9 @@ package com.tienda.facturacion;
 import com.tienda.carrito.Carrito;
 import com.tienda.carrito.Item;
 import com.tienda.clientes.Cliente;
+import com.tienda.clientes.Corportativo;
+import com.tienda.clientes.Descuento;
+import com.tienda.clientes.Premium;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -11,6 +14,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class Factura {
+
     private static int autoid = 1;
     private final int id;
     private final Cliente cliente;
@@ -27,6 +31,18 @@ public class Factura {
 
         autoid++;
     }
+    float agregarDescuento(Cliente cliente,float total){
+        if(cliente instanceof Premium){
+            total= (float) (total*0.7);//descuento del 30
+        }
+        else{
+            if(cliente instanceof Corportativo){
+                total=(float)(total*0.5);//descuento del 50
+            }
+        }
+        return total;
+    }
+
 
     public String mostrar() {
 
@@ -56,7 +72,7 @@ public class Factura {
                 ------------------------------------------------------------
                 """;
 
-            return String.format(formato, fechaFormato, this.id, this.cliente.getNombre(), this.cliente.getDni(), items, this.total);
+            return String.format(formato, fechaFormato, this.id, this.cliente.getNombre(), this.cliente.getDni(), items, this.total=agregarDescuento(cliente,total));//se agrego la funcion
         } catch (Exception e) {
             return null;
         }

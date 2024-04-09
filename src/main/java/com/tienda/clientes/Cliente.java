@@ -12,27 +12,21 @@ public class Cliente {
         this.id = autoid;
         this.nombre = nombre;
         this.dni = dni;
-        this.premium=false;
+
         autoid++;
     }
 
-    public Cliente(String nombre, String dni, String email,boolean premium) {
+    public Cliente(String nombre, String dni, String email) {
         this.id = autoid;
         this.nombre = nombre;
         this.dni = dni;
         this.email = email;
-        this.premium= premium;
+
 
         autoid++;
     }
 
-    public boolean isPremium() {
-        return premium;
-    }
 
-    public void setPremium(boolean premium) {
-        this.premium = premium;
-    }
 
     public int getId() {
         return id;
